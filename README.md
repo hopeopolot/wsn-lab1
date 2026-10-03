@@ -78,12 +78,5 @@ Simulation (`sim_raw.csv`)
 
 The temperature spread comes from moving the slider on purpose, so these numbers show the logic working, not sensor noise.
 
-![Raw vs filtered, simulation]
-
- Calibration (`calibration_pairs.csv`)
-
-Only two reference pairs exist, so a gain cannot be estimated and an **offset-only** correction is used: **+0.95 °C**. MAE falls from 0.95 to 0.25 °C and RMSE from 0.98 to 0.25 °C. This is a two-point result. A linear fit needs at least five pairs across the operating range. The logged data still have `temp_cal == temp_raw`, because the offset is not in the firmware yet.
-
-![Calibration](calibration_fit.png)
 
 
