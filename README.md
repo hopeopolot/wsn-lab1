@@ -54,7 +54,7 @@ Firmware
 
 Required Arduino libraries: *Adafruit SHT31 Library* and *Adafruit BusIO*.
 
-## Running the simulation in Wokwi
+Running the simulation in Wokwi
 
 1. Open the project link above and press **Start**.
 2. Open the serial monitor. A CSV header appears, then one row per second.
@@ -64,18 +64,9 @@ Required Arduino libraries: *Adafruit SHT31 Library* and *Adafruit BusIO*.
 
 The simulator has no real sensor noise, so it demonstrates the logic only.
 
-## Python pipeline
 
-- **`acquisition.ipynb` / `acquisition.py`** read the serial port with pyserial and write the CSV stream to `data/raw/`. Malformed lines go to a `.rejected.txt` file, not the bin. Colab cannot see a USB port, so record on your own computer.
-- **`analysis.ipynb`** loads each dataset and reports row count, duration, effective sampling rate, mean, minimum, maximum, standard deviation, invalid rows and events. It cross-checks the on-device moving average, rate of change and event count, saves seven plots per dataset, fits the calibration, estimates noise and filter lag, and compares data volumes. It runs locally or in Google Colab, which asks for the files in `data/raw/` if they are missing.
 
-```
-pip install -r requirements.txt
-```
-
-## Results so far
-
-### Simulation (`sim_raw.csv`)
+Simulation (`sim_raw.csv`)
 
 | Measure | Value |
 |---|---|
@@ -87,34 +78,12 @@ pip install -r requirements.txt
 
 The temperature spread comes from moving the slider on purpose, so these numbers show the logic working, not sensor noise.
 
-![Raw vs filtered, simulation](figures/sim_3_raw_vs_filtered.png)
+![Raw vs filtered, simulation]
 
-### Calibration (`calibration_pairs.csv`)
+ Calibration (`calibration_pairs.csv`)
 
 Only two reference pairs exist, so a gain cannot be estimated and an **offset-only** correction is used: **+0.95 °C**. MAE falls from 0.95 to 0.25 °C and RMSE from 0.98 to 0.25 °C. This is a two-point result. A linear fit needs at least five pairs across the operating range. The logged data still have `temp_cal == temp_raw`, because the offset is not in the firmware yet.
 
-![Calibration](figures/calibration_fit.png)
+![Calibration](calibration_fit.png)
 
-### Pipeline check on synthetic data
 
-`sample_serial_log.csv` is a synthetic dataset, not a hardware recording. The notebook runs on it to test the pipeline (650 rows, 6 invalid rows, 5 events, filter noise reduction of about 64 %), but its numbers must not be reported as measurements.
-
-### Data volume estimate
-
-At about 60 bytes per row: raw every 1 s is 86,400 messages and 4.3 MB per day, raw every 5 s is 17,280 and 0.86 MB, and one summary per minute is 1,440 and 0.07 MB.
-
-## What's still needed
-
-- [ ] Record the SHT31 baseline (at least 5 minutes, at least 600 rows) with `acquisition.ipynb`, then add it to `DATASETS` in `analysis.ipynb`
-- [ ] Characterization runs: LDR dark, room and bright; PIR walk-in and false triggers; temperature in two locations
-- [ ] At least three more calibration pairs across the temperature range, then copy the fitted constants into the firmware and re-record
-- [ ] Export the Wokwi `sketch.ino` and `diagram.json` into `firmware/wokwi/`
-- [ ] Add a photo of the wired prototype and a Wokwi screenshot to `docs/`
-- [ ] Write the technical report (`docs/lab_report.pdf`) from `docs/report_template.md`
-- [ ] Prepare the live demonstration
-
-The optional IMU, MQTT and buffering items from the advanced challenge are not implemented.
-
-## Limitations
-
-Low-cost sensors on a single node with a serial-only link. The reference thermometer's own accuracy limits how much calibration can help, and the current calibration rests on two points.
