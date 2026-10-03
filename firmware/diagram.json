@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "author": "Hope Aarakit",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 134.4, "left": -254.36, "attrs": {} },
+    { "type": "wokwi-photoresistor-sensor", "id": "ldr1", "top": 80, "left": -508, "attrs": {} },
+    {
+      "type": "wokwi-pir-motion-sensor",
+      "id": "pir1",
+      "top": 215.2,
+      "left": -468.18,
+      "attrs": {}
+    },
+    { "type": "wokwi-dht22", "id": "dht1", "top": -9.3, "left": -82.2, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 121.2,
+      "left": 4.2,
+      "attrs": { "color": "red", "flip": "" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 263.15,
+      "left": -28.8,
+      "attrs": { "value": "220000" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:34", "ldr1:AO", "green", [ "h0" ] ],
+    [ "esp:GND.1", "ldr1:GND", "black", [ "h-47.85", "v-144", "h0", "v-38.4", "h0" ] ],
+    [ "ldr1:VCC", "esp:3V3", "red", [ "h76.8", "v67.2", "h0" ] ],
+    [ "pir1:GND", "esp:GND.1", "black", [ "v38.4", "h86.14", "v-9.6" ] ],
+    [ "pir1:OUT", "esp:27", "green", [ "v67.2", "h67.06", "v-124.8" ] ],
+    [ "pir1:VCC", "esp:5V", "red", [ "v86.4", "h182.4" ] ],
+    [ "dht1:VCC", "esp:3V3", "red", [ "v19.2", "h-192" ] ],
+    [ "dht1:GND", "esp:GND.2", "black", [ "v0" ] ],
+    [ "dht1:SDA", "esp:15", "green", [ "v0" ] ],
+    [ "led1:C", "esp:GND.3", "green", [ "v0" ] ],
+    [ "led1:A", "r1:2", "green", [ "v0" ] ],
+    [ "r1:1", "esp:2", "green", [ "v28.8", "h-124.8" ] ]
+  ],
+  "dependencies": {}
+}
